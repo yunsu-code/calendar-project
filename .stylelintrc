@@ -1,0 +1,33 @@
+{
+  "processors": ["stylelint-processor-styled-components"],
+  "extends": [
+    "stylelint-config-recommended",
+    "stylelint-config-recess-order",
+    "stylelint-config-prettier",
+    "stylelint-config-styled-components"
+  ],
+  "ignoreFiles": [
+    "plugins/**/*.*",
+    "data/**/*.*",
+    ".storybook/**/*.ts",
+    "src/**(!stories)/*.ts",
+    "src/app/**/*.*",
+    "src/pages/**/*.tsx",
+    "src/components/**/*.tsx"
+  ],
+  "overrides": [
+    {
+      "files": ["**/*.{jsx,tsx,ts}"],
+      "customSyntax": "@stylelint/postcss-css-in-js"
+    }
+  ],
+  "rules": {
+    "declaration-colon-space-after": "always",
+    "function-no-unknown": [
+      true,
+      {
+        "ignoreFunctions": ["/\\${/"]
+      }
+    ]
+  }
+}
