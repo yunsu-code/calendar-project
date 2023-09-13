@@ -1,0 +1,12 @@
+.calendarWrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  & > div {
+    width: 100%;
+    max-width: 900px;
+  }
+}
+
+.dayBtn {
+}

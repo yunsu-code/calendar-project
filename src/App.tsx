@@ -1,8 +1,15 @@
-// import { useState } from "react";
+import React, { FC } from "react";
 import "./App.css";
+import Home from "./view/home/Home";
 
-function App() {
-  return <></>;
-}
+interface AppProps {}
+
+const App: FC<AppProps> = ({}) => {
+  return (
+    <>
+      <Home />
+    </>
+  );
+};
 
 export default App;
