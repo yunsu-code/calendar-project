@@ -1,6 +1,6 @@
 import React, { FC } from "react";
-import "./App.css";
 import Home from "./view/home/Home";
+import "./App.scss";
 
 interface AppProps {}
 

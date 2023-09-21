@@ -26,6 +26,7 @@ const Home: FC<HomeProps> = ({}) => {
         formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 1)}
         dateFormat="yyyy.MM.dd"
         inline
+        todayButton="Today"
         selected={startDate}
         onChange={(date: Date) => setStartDate(date)}
         renderDayContents={renderDay}
