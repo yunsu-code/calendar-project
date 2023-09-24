@@ -74,6 +74,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
+  transition: background-color 0.2s ease-in-out;
   &:hover {
     background-color: $light;
     border-radius: 50%;
@@ -85,8 +86,15 @@
 .react-datepicker__day.react-datepicker__day--outside-month {
   opacity: 0.3;
 }
-.react-datepicker__day--selected {
+.react-datepicker__day.react-datepicker__day--today {
   background-color: $navy;
+  &:hover {
+    background-color: $navy;
+    opacity: 0.5;
+  }
+}
+.react-datepicker__day--selected {
+  background-color: $light;
 }
 .react-datepicker__day--keyboard-selected {
   background-color: $light;
