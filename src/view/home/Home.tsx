@@ -9,16 +9,18 @@ import styles from "@style/home/home.module.scss";
 import useMediaQuery from "@assets/js/useMediaQuery";
 import cx from "classnames";
 import { PlusOutlined } from "@ant-design/icons";
-import { FloatButton, Modal, Input } from "antd";
-import type { SearchProps } from "../Search";
-const { Search } = Input;
+import { FloatButton } from "antd";
+
+import TodoList from "@/components/Todo/TodoList";
+import BottomDrawer from "@/components/drawer/BottomDrawer";
+
 interface HomeProps {}
 
 const Home: FC<HomeProps> = ({}) => {
   const isTablet = useMediaQuery(900);
   const [startDate, setStartDate] = useState(new Date());
   const [open, setOpen] = useState(false);
-  const [modalText, setModalText] = useState("Content of the modal");
+  const [modalText, setModalText] = useState("");
 
   const renderDay = (day: any, date: any) => {
     return <span className={styles.dayBtn}>{getDate(date)}</span>;
@@ -29,15 +31,9 @@ const Home: FC<HomeProps> = ({}) => {
     setModalText(startDate.toLocaleDateString());
     setOpen(true);
   };
-  const handleOk = () => {
+  const closeModal = () => {
     setOpen(false);
   };
-  const handleCancel = () => {
-    console.log("Clicked cancel button");
-    setOpen(false);
-  };
-  const onSearch: SearchProps["onSearch"] = (value: any, _e: any, info: any) =>
-    console.log(value);
 
   return (
     <div
@@ -52,18 +48,16 @@ const Home: FC<HomeProps> = ({}) => {
         onChange={(date: Date) => setStartDate(date)}
         renderDayContents={renderDay}
       />
+      <TodoList listTitle={""} />
       <FloatButton
         icon={<PlusOutlined style={{ color: "#fff" }} />}
         onClick={showModal}
       />
-      <Modal
-        title={modalText}
-        open={open}
-        onCancel={handleCancel}
-        onOk={handleOk}
-      >
-        <Search placeholder="할 일을 입력하세요." onSearch={onSearch} />
-      </Modal>
+      <BottomDrawer
+        dateTitle={modalText}
+        drawerOpen={open}
+        drawerClose={closeModal}
+      />
     </div>
   );
 };
