@@ -1,60 +1,58 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useMemo } from "react";
 import { DownOutlined } from "@ant-design/icons";
-import { Button, Drawer, Form, Input, Space, ColorPicker } from "antd";
-// import styles from ""
+import { Button, Drawer, Form, Input, Space, ColorPicker, theme } from "antd";
+import { addTodo } from "@redux/todo";
+import { useSelector, useDispatch } from "react-redux";
+import type { Color, ColorPickerProps } from "antd/es/color-picker";
 
-interface BottomDrawerProps {
-  dateTitle: string;
-  drawerOpen: any;
-  drawerClose: any;
+interface Values {
+  title: string;
+  note: string;
+  color: any;
 }
 
-const BottomDrawer: FC<BottomDrawerProps> = ({
-  dateTitle,
-  drawerOpen,
-  drawerClose,
-}) => {
+interface BottomDrawerProps {
+  open: boolean;
+  onCreate: (values: Values) => void;
+  onCancel: () => void;
+}
+
+const BottomDrawer: FC<BottomDrawerProps> = ({ open, onCreate, onCancel }) => {
+  const [form] = Form.useForm();
   const [arrowOpen, setArrowOpen] = useState(false);
+  const dispatch = useDispatch();
 
   return (
     <Drawer
-      title={dateTitle + " 할 일을 입력하세요."}
-      onClose={drawerClose}
-      open={drawerOpen}
+      open={open}
+      onClose={() => {
+        form.resetFields();
+        onCancel();
+      }}
+      title={" 할 일을 입력하세요."}
       height={600}
       placement={"bottom"}
       destroyOnClose //닫기시 하위요소 마운트 해제
-      extra={
-        <Space>
-          <Button onClick={drawerClose}>취소</Button>
-          <Button onClick={drawerClose} type="primary">
-            저장
-          </Button>
-        </Space>
-      }
     >
-      <Form layout="vertical" hideRequiredMark>
+      <Form form={form} layout="vertical" initialValues={{ color: "#1677ff" }}>
         <Form.Item
-          name="Title"
+          name="title"
           label="Title"
-          rules={[{ required: true, message: "Title" }]}
+          rules={[{ required: true, message: "제목을 입력해주세요." }]}
         >
           <Input placeholder="Title" />
         </Form.Item>
         <Form.Item
-          name="Note"
+          name="note"
           label="Note"
-          rules={[{ required: true, message: "Note" }]}
+          rules={[{ required: true, message: "내용을 입력해주세요." }]}
         >
           <Input.TextArea rows={4} placeholder="Note" />
         </Form.Item>
-        <Form.Item
-          name="Color"
-          label="Color"
-          rules={[{ required: true, message: "color is required!" }]}
-        >
+        <Form.Item name="color" label="Color">
           <ColorPicker
             open={arrowOpen}
+            disabledAlpha
             onOpenChange={setArrowOpen}
             showText={() => (
               <DownOutlined
@@ -66,6 +64,35 @@ const BottomDrawer: FC<BottomDrawerProps> = ({
             )}
           />
         </Form.Item>
+        <Space>
+          <Button
+            htmlType="submit"
+            type="primary"
+            onClick={() => {
+              form
+                .validateFields() //필수 입력 체크
+                .then((values) => {
+                  form.resetFields();
+                  onCreate(values);
+                  dispatch(addTodo(values));
+                  console.log("sss");
+                })
+                .catch((info) => {
+                  console.log("Validate Failed:", info);
+                });
+            }}
+          >
+            저장
+          </Button>
+          <Button
+            onClick={() => {
+              form.resetFields();
+              onCancel();
+            }}
+          >
+            취소
+          </Button>
+        </Space>
       </Form>
     </Drawer>
   );
