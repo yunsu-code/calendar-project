@@ -1,9 +1,48 @@
 .calendarWrap {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  & > div {
+  background-color: $skyblue;
+
+  &.tablet {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width: 100%;
-    max-width: 900px;
+  }
+
+  &.pc {
+    display: flex;
+    width: 100%;
+    min-height: 500px;
+    > div:first-child {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 50vw;
+      height: 100vh;
+      background-color: $skyblue;
+    }
+    [class^="react-datepicker"] {
+    }
+  }
+
+  .noData {
+    padding: 60px 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: $gray;
+    text-align: center;
+  }
+  .colorDotWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: 24px;
+  }
+  .colorDot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin: 0 1px;
+    border-radius: 50%;
   }
 }

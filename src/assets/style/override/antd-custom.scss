@@ -49,3 +49,39 @@
     border: 2px solid rgba(30, 52, 99, 0.4);
   }
 }
+
+//checkbox
+.ant-checkbox-wrapper {
+  flex-shrink: 0;
+  border-radius: 50%;
+  transition: 0.3s all;
+  .ant-checkbox {
+    border-radius: 50%;
+    .ant-checkbox-inner {
+      width: 28px;
+      height: 28px;
+      background-color: #fff;
+      border: 0;
+      border-radius: 50%;
+    }
+    &.ant-checkbox-checked {
+      .ant-checkbox-inner {
+        background-color: unset;
+        border: unset;
+        &::after {
+          top: 45%;
+          left: 7px;
+          width: 8px;
+          height: 15px;
+        }
+      }
+    }
+  }
+  &:not(.ant-checkbox-wrapper-disabled):hover
+    .ant-checkbox-checked:not(.ant-checkbox-disabled)
+    .ant-checkbox-inner {
+    background-color: unset;
+    border: 0;
+    border-color: unset;
+  }
+}

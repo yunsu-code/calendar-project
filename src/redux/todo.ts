@@ -2,21 +2,18 @@ const ADD_TODO = "todo/ADD_TODO";
 const TOGGLE_TODO = "todo/TOGGLE_TODO";
 const DELETE_TODO = "todo/DELETE_TODO";
 
-let nextId = 0;
 const initialState: Array<any> = [];
 
-export const addTodo = (
-  // content: any
-  todo: any
-) => ({
+export const addTodo = (id: number, todo: any, date: any) => ({
   type: ADD_TODO,
   todo: {
-    id: nextId++,
+    id: id,
+    date: date,
     content: {
       title: todo.title,
       note: todo.note,
       color: todo.color,
-      date: todo.date,
+      done: false,
     },
   },
 });

@@ -1,4 +1,4 @@
-import React, { FC, useState, useMemo } from "react";
+import React, { FC, useState, useRef } from "react";
 import { DownOutlined } from "@ant-design/icons";
 import { Button, Drawer, Form, Input, Space, ColorPicker, theme } from "antd";
 import { addTodo } from "@redux/todo";
@@ -13,23 +13,41 @@ interface Values {
 
 interface BottomDrawerProps {
   open: boolean;
-  onCreate: (values: Values) => void;
   onCancel: () => void;
+  currentDate: string;
 }
 
-const BottomDrawer: FC<BottomDrawerProps> = ({ open, onCreate, onCancel }) => {
+const BottomDrawer: FC<BottomDrawerProps> = ({
+  open,
+  currentDate,
+  onCancel,
+}) => {
   const [form] = Form.useForm();
   const [arrowOpen, setArrowOpen] = useState(false);
   const dispatch = useDispatch();
+  const dataArray = useSelector((state: any) => state.todo);
+  const submit = () => {
+    form
+      .validateFields() //필수 입력 체크
+      .then((values: Values) => {
+        form.resetFields();
+        onCancel();
+        dispatch(addTodo(dataArray.length + 1, values, currentDate));
+      })
+      .catch((info) => {
+        console.log("Validate Failed:", info);
+      });
+  };
+  const cancel = () => {
+    form.resetFields();
+    onCancel();
+  };
 
   return (
     <Drawer
       open={open}
-      onClose={() => {
-        form.resetFields();
-        onCancel();
-      }}
-      title={" 할 일을 입력하세요."}
+      onClose={cancel}
+      title={`${currentDate} 할 일을 입력하세요.`}
       height={600}
       placement={"bottom"}
       destroyOnClose //닫기시 하위요소 마운트 해제
@@ -65,33 +83,10 @@ const BottomDrawer: FC<BottomDrawerProps> = ({ open, onCreate, onCancel }) => {
           />
         </Form.Item>
         <Space>
-          <Button
-            htmlType="submit"
-            type="primary"
-            onClick={() => {
-              form
-                .validateFields() //필수 입력 체크
-                .then((values) => {
-                  form.resetFields();
-                  onCreate(values);
-                  dispatch(addTodo(values));
-                  console.log("sss");
-                })
-                .catch((info) => {
-                  console.log("Validate Failed:", info);
-                });
-            }}
-          >
+          <Button htmlType="submit" type="primary" onClick={submit}>
             저장
           </Button>
-          <Button
-            onClick={() => {
-              form.resetFields();
-              onCancel();
-            }}
-          >
-            취소
-          </Button>
+          <Button onClick={cancel}>취소</Button>
         </Space>
       </Form>
     </Drawer>
