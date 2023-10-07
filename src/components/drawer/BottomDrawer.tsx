@@ -25,14 +25,14 @@ const BottomDrawer: FC<BottomDrawerProps> = ({
   const [form] = Form.useForm();
   const [arrowOpen, setArrowOpen] = useState(false);
   const dispatch = useDispatch();
-  const dataArray = useSelector((state: any) => state.todo);
+  const dataObject = useSelector((state: any) => state.todo);
   const submit = () => {
     form
       .validateFields() //필수 입력 체크
       .then((values: Values) => {
         form.resetFields();
         onCancel();
-        dispatch(addTodo(dataArray.length + 1, values, currentDate));
+        dispatch(addTodo(dataObject.length + 1, values, currentDate));
       })
       .catch((info) => {
         console.log("Validate Failed:", info);

@@ -9,11 +9,11 @@ export const addTodo = (id: number, todo: any, date: any) => ({
   todo: {
     id: id,
     date: date,
+    done: false,
     content: {
       title: todo.title,
       note: todo.note,
       color: todo.color,
-      done: false,
     },
   },
 });
@@ -34,11 +34,11 @@ export default function todos(state = initialState, action: any) {
       return state.map(
         (todo) =>
           todo.id === action.id // id 가 일치하면
-            ? { ...todo, done: !todo.done } // done 값을 반전시키고
-            : todo // 아니라면 그대로 둠
+            ? { ...todo, done: !todo.done } // done 값을 반전
+            : todo // 아니면 그냥 둠
       );
     case DELETE_TODO:
-      return state.splice(action.todo);
+      return state.slice().filter((todo) => todo.id !== action.id); // id일치하면 삭제
     default:
       return state;
   }
