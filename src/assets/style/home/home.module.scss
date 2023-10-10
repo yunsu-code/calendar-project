@@ -6,11 +6,10 @@
     flex-direction: column;
     justify-content: center;
     .datePicker {
-      width: 100%;
-      position: fixed;
+      // position: fixed;
       top: 0;
-      width: 100%;
       z-index: 999;
+      width: 100%;
     }
   }
 

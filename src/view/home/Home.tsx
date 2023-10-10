@@ -22,10 +22,18 @@ const Home: FC<HomeProps> = ({}) => {
   const [startDate, setStartDate] = useState<Date>(today);
   const [currentDate, setCurrentDate] = useState<any>("");
   const [currentTodo, setCurrentTodo] = useState<any>([]);
+  const [currentTodoID, setCurrentTodoID] = useState<number>(0);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const Tablet = useMediaQuery(900);
   const dataObject = useSelector((state: any) => state.todo);
   const todayFormat = format(today, "yyyy년 MM월 dd일");
+
+  const handleTodoID = (id: number) => {
+    setCurrentTodoID(id);
+    setIsEdit(true);
+    setOpen(true);
+  };
 
   const renderDay = (day: any, date: any) => {
     const dateFormat = format(date, "yyyy년 MM월 dd일");
@@ -88,6 +96,8 @@ const Home: FC<HomeProps> = ({}) => {
       <BottomDrawer
         open={open}
         currentDate={currentDate}
+        currentId={currentTodoID}
+        isEdit={isEdit}
         onCancel={() => {
           setOpen(false);
         }}
@@ -100,6 +110,7 @@ const Home: FC<HomeProps> = ({}) => {
               <TodoList
                 key={data.id}
                 id={data.id}
+                onIdChange={handleTodoID}
                 check={data.done}
                 listTitle={data.content.title}
                 listNote={data.content.note}

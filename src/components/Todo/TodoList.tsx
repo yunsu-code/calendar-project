@@ -3,10 +3,10 @@ import styles from "@style/components/todo/todoList.module.scss";
 import { Checkbox, Button } from "antd";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import cx from "classnames";
-import { toggleTodo, deleteTodo } from "@redux/todo";
+import { toggleTodo, deleteTodo, editTodo } from "@redux/todo";
 import { useSelector, useDispatch } from "react-redux";
-import { DeleteOutlined } from "@ant-design/icons";
-import { Avatar, List } from "antd";
+import { DeleteOutlined, FormOutlined } from "@ant-design/icons";
+import { List } from "antd";
 
 interface TodoListProps {
   listTitle: string;
@@ -14,6 +14,7 @@ interface TodoListProps {
   color: any;
   id: number;
   check: boolean;
+  onIdChange: (id: number) => void;
 }
 
 const TodoList: FC<TodoListProps> = ({
@@ -22,6 +23,7 @@ const TodoList: FC<TodoListProps> = ({
   color,
   id,
   check,
+  onIdChange,
 }) => {
   const [checked, setChecked] = useState(false);
   const dispatch = useDispatch();
@@ -37,13 +39,23 @@ const TodoList: FC<TodoListProps> = ({
     console.log(id);
   };
 
+  const editData = () => {
+    onIdChange(id);
+    // dispatch(editTodo(id));
+  };
+
   return (
     <List.Item
       className={cx(
         styles.listWrap,
         checked || check ? styles.done : styles.ing
       )}
-      actions={[<Button icon={<DeleteOutlined />} onClick={deleteData} />]}
+      actions={[
+        <>
+          <Button icon={<FormOutlined />} onClick={editData} />
+          <Button icon={<DeleteOutlined />} onClick={deleteData} />
+        </>,
+      ]}
     >
       <List.Item.Meta
         avatar={

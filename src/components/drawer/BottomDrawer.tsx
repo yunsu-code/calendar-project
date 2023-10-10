@@ -3,7 +3,6 @@ import { DownOutlined } from "@ant-design/icons";
 import { Button, Drawer, Form, Input, Space, ColorPicker, theme } from "antd";
 import { addTodo } from "@redux/todo";
 import { useSelector, useDispatch } from "react-redux";
-import type { Color, ColorPickerProps } from "antd/es/color-picker";
 
 interface Values {
   title: string;
@@ -15,34 +14,50 @@ interface BottomDrawerProps {
   open: boolean;
   onCancel: () => void;
   currentDate: string;
+  currentId: number;
+  isEdit: boolean;
 }
 
 const BottomDrawer: FC<BottomDrawerProps> = ({
   open,
   currentDate,
   onCancel,
+  currentId,
+  isEdit,
 }) => {
   const [form] = Form.useForm();
   const [arrowOpen, setArrowOpen] = useState(false);
   const dispatch = useDispatch();
   const dataObject = useSelector((state: any) => state.todo);
+
   const submit = () => {
     form
       .validateFields() //필수 입력 체크
       .then((values: Values) => {
         form.resetFields();
         onCancel();
-        dispatch(addTodo(dataObject.length + 1, values, currentDate));
+        dispatch(
+          addTodo(
+            dataObject.length === 0
+              ? dataObject.length + 1
+              : dataObject[dataObject.length - 1].id + 1, // todo삭제 후에도 번호 겹치지 않도록
+            values,
+            currentDate
+          )
+        );
       })
       .catch((info) => {
         console.log("Validate Failed:", info);
       });
   };
+  console.log(isEdit);
   const cancel = () => {
     form.resetFields();
     onCancel();
+    !isEdit;
   };
 
+  // console.log(currentId);
   return (
     <Drawer
       open={open}

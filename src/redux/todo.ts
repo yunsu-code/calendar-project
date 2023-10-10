@@ -1,6 +1,7 @@
 const ADD_TODO = "todo/ADD_TODO";
 const TOGGLE_TODO = "todo/TOGGLE_TODO";
 const DELETE_TODO = "todo/DELETE_TODO";
+const EDIT_TODO = "todo/EDIT_TODO";
 
 const initialState: Array<any> = [];
 
@@ -25,6 +26,10 @@ export const deleteTodo = (id: number) => ({
   type: DELETE_TODO,
   id,
 });
+export const editTodo = (id: number) => ({
+  type: EDIT_TODO,
+  id,
+});
 
 export default function todos(state = initialState, action: any) {
   switch (action.type) {
@@ -39,6 +44,8 @@ export default function todos(state = initialState, action: any) {
       );
     case DELETE_TODO:
       return state.slice().filter((todo) => todo.id !== action.id); // id일치하면 삭제
+    case EDIT_TODO:
+      return state.filter((todo) => todo.id == action.id);
     default:
       return state;
   }
