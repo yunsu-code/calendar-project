@@ -3,19 +3,20 @@ import styles from "@style/components/todo/todoList.module.scss";
 import { Checkbox, Button } from "antd";
 import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import cx from "classnames";
-import { toggleTodo, deleteTodo, editTodo } from "@redux/todo";
-import { useSelector, useDispatch } from "react-redux";
-import { DeleteOutlined, FormOutlined } from "@ant-design/icons";
+import { EllipsisOutlined } from "@ant-design/icons";
 import { List } from "antd";
-// 커밋테스트
+import { useSelector, useDispatch } from "react-redux";
+import { toggleTodo, deleteTodo } from "@redux/todo";
+import { selectTodo } from "@redux/date";
+import { stateModal } from "@redux/modalUi";
 
 interface TodoListProps {
   listTitle: string;
   listNote: string;
-  color: any;
+  color: string;
   id: number;
   check: boolean;
-  onIdChange: (id: number) => void;
+  // onIdChange: (id: number) => void;
 }
 
 const TodoList: FC<TodoListProps> = ({
@@ -24,25 +25,19 @@ const TodoList: FC<TodoListProps> = ({
   color,
   id,
   check,
-  onIdChange,
+  // onIdChange,
 }) => {
   const [checked, setChecked] = useState(false);
   const dispatch = useDispatch();
-  const dataArray = useSelector((state: any) => state.todo);
 
   const onChecked = (e: CheckboxChangeEvent) => {
     setChecked(e.target.checked);
     dispatch(toggleTodo(id));
   };
 
-  const deleteData = () => {
-    dispatch(deleteTodo(id));
-    console.log(id);
-  };
-
-  const editData = () => {
-    onIdChange(id);
-    // dispatch(editTodo(id));
+  const clickUpdate = () => {
+    dispatch(selectTodo(id));
+    dispatch(stateModal(true));
   };
 
   return (
@@ -53,8 +48,7 @@ const TodoList: FC<TodoListProps> = ({
       )}
       actions={[
         <>
-          <Button icon={<FormOutlined />} onClick={editData} />
-          <Button icon={<DeleteOutlined />} onClick={deleteData} />
+          <Button onClick={clickUpdate} icon={<EllipsisOutlined />}></Button>
         </>,
       ]}
     >

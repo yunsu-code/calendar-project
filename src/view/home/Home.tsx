@@ -1,44 +1,55 @@
 import React, { FC, useState, useEffect } from "react";
-import { getDate, getMonth, getYear, format } from "date-fns";
+// datepicker
 import DatePicker from "react-datepicker";
+import {
+  getDate,
+  getMonth,
+  getYear,
+  getDay,
+  getWeek,
+  format,
+  getWeekOfMonth,
+} from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
+// component
+import TodoList from "@/components/Todo/TodoList";
+import BottomDrawer from "@/components/modalUi/BottomDrawer";
+import TodoContainer from "@/components/Todo/TodoContainer";
+// antd
+import { FloatButton, List, Input } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import "@style/override/datepicker-custom.scss";
 import "@style/override/antd-custom.scss";
-import { PlusOutlined } from "@ant-design/icons";
-import { FloatButton, List } from "antd";
-import { useSelector, useDispatch } from "react-redux";
-import TodoList from "@/components/Todo/TodoList";
-import BottomDrawer from "@/components/drawer/BottomDrawer";
+// style
 import styles from "@style/home/home.module.scss";
-import useMediaQuery from "@assets/js/useMediaQuery";
 import cx from "classnames";
-import TodoContainer from "@/components/Todo/TodoContainer";
+// redux
+import { useSelector, useDispatch } from "react-redux";
+import { selectDate } from "@redux/date";
+import { stateDrawer } from "@redux/modalUi";
+import UpdateModal from "@/components/modalUi/UpdateModal";
 
 interface HomeProps {}
 
 const Home: FC<HomeProps> = ({}) => {
   const today = new Date();
-  const [open, setOpen] = useState(false);
   const [startDate, setStartDate] = useState<Date>(today);
-  const [currentDate, setCurrentDate] = useState<any>("");
+  const [currentDate, setCurrentDate] = useState<string>("");
+  const [currentYear, setCurrentYear] = useState<number>(getYear(today));
+  const [currentMonth, setCurrentMonth] = useState<number>(getMonth(today) + 1);
+  const [currentDay, setCurrentDay] = useState<number>(getDate(today));
+  const [currentWeek, setCurrentWeek] = useState<number>(getWeekOfMonth(today));
   const [currentTodo, setCurrentTodo] = useState<any>([]);
-  const [currentTodoID, setCurrentTodoID] = useState<number>(0);
-  const [isEdit, setIsEdit] = useState<boolean>(false);
 
-  const Tablet = useMediaQuery(900);
-  const dataObject = useSelector((state: any) => state.todo);
   const todayFormat = format(today, "yyyy년 MM월 dd일");
+  const dispatch = useDispatch();
+  const myTodoData = useSelector((state: any) => state.todo);
+  const drawerOpen = useSelector((state: any) => state.modalUi.drawerOpen);
 
-  const handleTodoID = (id: number) => {
-    setCurrentTodoID(id);
-    setIsEdit(true);
-    setOpen(true);
-  };
-
-  const renderDay = (day: any, date: any) => {
-    const dateFormat = format(date, "yyyy년 MM월 dd일");
-    const dateFilter = dataObject.filter(
-      (date: any) => date.date === dateFormat
+  const renderDay = (day: number, date: Date) => {
+    const currentDateFormat = format(date, "yyyy년 MM월 dd일");
+    const dateFilter = myTodoData.filter(
+      (date: any) => date.date === currentDateFormat
     );
     return (
       <>
@@ -60,7 +71,9 @@ const Home: FC<HomeProps> = ({}) => {
                 }
               ></div>
             ))}
-            {dateFilter.length > 3 ? <span>+{dateFilter.length - 3}</span> : ""}
+            {dateFilter.length > 3 ? (
+              <span>+{dateFilter.length - 3}</span>
+            ) : null}
           </div>
         ) : null}
       </>
@@ -68,17 +81,33 @@ const Home: FC<HomeProps> = ({}) => {
   };
 
   useEffect(() => {
+    setCurrentTodo(myTodoData.filter((date: any) => date.date === currentDate));
+  }, [currentDate, myTodoData]);
+
+  useEffect(() => {
     setCurrentDate(format(startDate, "yyyy년 MM월 dd일"));
+    setCurrentYear(getYear(startDate));
+    setCurrentMonth(getMonth(startDate) + 1);
+    setCurrentDay(getDate(startDate));
+    setCurrentWeek(getWeekOfMonth(startDate));
   }, [startDate]);
 
   useEffect(() => {
-    setCurrentTodo(dataObject.filter((date: any) => date.date === currentDate));
-  }, [currentDate, dataObject]);
+    dispatch(
+      selectDate(
+        currentDate,
+        currentYear,
+        currentMonth,
+        currentWeek,
+        currentDay
+      )
+    );
+  });
+
+  console.log(currentDate, currentYear, currentMonth, currentWeek, currentDay);
 
   return (
-    <div
-      className={cx(styles.calendarWrap, Tablet ? styles.tablet : styles.pc)}
-    >
+    <div className={cx(styles.calendarWrap, styles.tablet)}>
       <div className={styles.datePicker}>
         <DatePicker
           className={styles.calendar}
@@ -93,15 +122,7 @@ const Home: FC<HomeProps> = ({}) => {
           renderDayContents={renderDay}
         />
       </div>
-      <BottomDrawer
-        open={open}
-        currentDate={currentDate}
-        currentId={currentTodoID}
-        isEdit={isEdit}
-        onCancel={() => {
-          setOpen(false);
-        }}
-      />
+      <BottomDrawer open={drawerOpen} currentDate={currentDate} />
       <TodoContainer>
         <h2>{currentDate === todayFormat ? "Today" : currentDate}</h2>
         {currentTodo.length > 0 ? (
@@ -110,7 +131,6 @@ const Home: FC<HomeProps> = ({}) => {
               <TodoList
                 key={data.id}
                 id={data.id}
-                onIdChange={handleTodoID}
                 check={data.done}
                 listTitle={data.content.title}
                 listNote={data.content.note}
@@ -129,9 +149,10 @@ const Home: FC<HomeProps> = ({}) => {
       <FloatButton
         icon={<PlusOutlined style={{ color: "#fff" }} />}
         onClick={() => {
-          setOpen(true);
+          dispatch(stateDrawer(true));
         }}
       />
+      <UpdateModal />
     </div>
   );
 };

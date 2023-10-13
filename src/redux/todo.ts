@@ -1,3 +1,4 @@
+// action
 const ADD_TODO = "todo/ADD_TODO";
 const TOGGLE_TODO = "todo/TOGGLE_TODO";
 const DELETE_TODO = "todo/DELETE_TODO";
@@ -5,6 +6,7 @@ const EDIT_TODO = "todo/EDIT_TODO";
 
 const initialState: Array<any> = [];
 
+// action creater
 export const addTodo = (id: number, todo: any, date: any) => ({
   type: ADD_TODO,
   todo: {
@@ -31,6 +33,7 @@ export const editTodo = (id: number) => ({
   id,
 });
 
+// reducer
 export default function todos(state = initialState, action: any) {
   switch (action.type) {
     case ADD_TODO:
@@ -45,6 +48,7 @@ export default function todos(state = initialState, action: any) {
     case DELETE_TODO:
       return state.slice().filter((todo) => todo.id !== action.id); // id일치하면 삭제
     case EDIT_TODO:
+      const editTodo = state.filter((todo) => todo.id == action.id);
       return state.filter((todo) => todo.id == action.id);
     default:
       return state;

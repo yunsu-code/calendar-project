@@ -1,8 +1,11 @@
-import React, { FC, useState, useRef } from "react";
+import React, { FC, useState } from "react";
+// antd
 import { DownOutlined } from "@ant-design/icons";
 import { Button, Drawer, Form, Input, Space, ColorPicker, theme } from "antd";
-import { addTodo } from "@redux/todo";
+// redux
 import { useSelector, useDispatch } from "react-redux";
+import { addTodo } from "@redux/todo";
+import { stateDrawer } from "@redux/modalUi";
 
 interface Values {
   title: string;
@@ -12,35 +15,27 @@ interface Values {
 
 interface BottomDrawerProps {
   open: boolean;
-  onCancel: () => void;
   currentDate: string;
-  currentId: number;
-  isEdit: boolean;
 }
 
-const BottomDrawer: FC<BottomDrawerProps> = ({
-  open,
-  currentDate,
-  onCancel,
-  currentId,
-  isEdit,
-}) => {
+const BottomDrawer: FC<BottomDrawerProps> = ({ open, currentDate }) => {
   const [form] = Form.useForm();
   const [arrowOpen, setArrowOpen] = useState(false);
   const dispatch = useDispatch();
-  const dataObject = useSelector((state: any) => state.todo);
+
+  const myTodoData = useSelector((state: any) => state.todo);
 
   const submit = () => {
     form
       .validateFields() //필수 입력 체크
       .then((values: Values) => {
         form.resetFields();
-        onCancel();
+        dispatch(stateDrawer(false));
         dispatch(
           addTodo(
-            dataObject.length === 0
-              ? dataObject.length + 1
-              : dataObject[dataObject.length - 1].id + 1, // todo삭제 후에도 번호 겹치지 않도록
+            myTodoData.length === 0
+              ? myTodoData.length + 1
+              : myTodoData[myTodoData.length - 1].id + 1, // todo삭제 후에도 번호 겹치지 않도록 마지막 인덱스 id + 1
             values,
             currentDate
           )
@@ -50,14 +45,11 @@ const BottomDrawer: FC<BottomDrawerProps> = ({
         console.log("Validate Failed:", info);
       });
   };
-  console.log(isEdit);
   const cancel = () => {
     form.resetFields();
-    onCancel();
-    !isEdit;
+    dispatch(stateDrawer(false));
   };
 
-  // console.log(currentId);
   return (
     <Drawer
       open={open}
@@ -73,7 +65,7 @@ const BottomDrawer: FC<BottomDrawerProps> = ({
           label="Title"
           rules={[{ required: true, message: "제목을 입력해주세요." }]}
         >
-          <Input placeholder="Title" />
+          <Input type="text" placeholder="Title" />
         </Form.Item>
         <Form.Item
           name="note"
@@ -87,6 +79,7 @@ const BottomDrawer: FC<BottomDrawerProps> = ({
             open={arrowOpen}
             disabledAlpha
             onOpenChange={setArrowOpen}
+            // value={"#1677ff"}
             showText={() => (
               <DownOutlined
                 rotate={arrowOpen ? 180 : 0}
