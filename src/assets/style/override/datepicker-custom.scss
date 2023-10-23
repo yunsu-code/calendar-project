@@ -2,8 +2,6 @@
   position: relative;
   width: 100%;
   max-width: 800px;
-  font-family: "Inter", "Apple SD Gothic Neo", "AppleGothic", "Apple Gothic",
-    "-apple-system", sans-serif !important;
   background-color: $skyblue;
   border: 0;
   border-radius: 0;
@@ -66,9 +64,13 @@
   margin: 0.166rem;
   font-size: 15px;
   font-weight: 700;
+  // font-family: "score7";
   line-height: 30px;
   color: #fff;
   text-align: center;
+  > span {
+    font-family: "score" !important;
+  }
 }
 .react-datepicker__day {
   width: 36px;

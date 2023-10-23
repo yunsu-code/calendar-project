@@ -1,0 +1,25 @@
+.btn {
+	width: 50%;
+	font-size: 16px;
+	height: auto;
+	padding-top: 7px;
+	padding-bottom: 7px;
+	border-radius: 9px;
+	margin-top: 20px;
+	&+ .btn {
+		margin-left: 10px;
+	}
+	&.submitBtn[class~="ant-btn-primary"] {
+		background-color: $pink;
+		&:hover {
+			background-color: $pink;
+		}
+	}
+	&.cancelBtn[class~="ant-btn-default"] {
+		color: $gray;
+		&:hover {
+			border-color: $pink;
+			color: $pink;
+		}
+	}
+}

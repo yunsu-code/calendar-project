@@ -1,12 +1,12 @@
-import React, { FC, useState } from "react";
-// antd
-import { DownOutlined } from "@ant-design/icons";
-import { Button, Drawer, Form, Input, Space, ColorPicker, theme } from "antd";
+import React, { FC } from "react";
+// antd=
+import { Button, Drawer, Form } from "antd";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { addTodo } from "@redux/todo";
 import { stateDrawer } from "@redux/modalUi";
-
+import TodoForm from "../Todo/TodoForm";
+import TodoSaveButton from "../Todo/TodoSaveButton";
 interface Values {
   title: string;
   note: string;
@@ -20,10 +20,9 @@ interface BottomDrawerProps {
 
 const BottomDrawer: FC<BottomDrawerProps> = ({ open, currentDate }) => {
   const [form] = Form.useForm();
-  const [arrowOpen, setArrowOpen] = useState(false);
   const dispatch = useDispatch();
-
   const myTodoData = useSelector((state: any) => state.todo);
+  console.log(typeof form);
 
   const submit = () => {
     form
@@ -45,6 +44,7 @@ const BottomDrawer: FC<BottomDrawerProps> = ({ open, currentDate }) => {
         console.log("Validate Failed:", info);
       });
   };
+
   const cancel = () => {
     form.resetFields();
     dispatch(stateDrawer(false));
@@ -55,48 +55,15 @@ const BottomDrawer: FC<BottomDrawerProps> = ({ open, currentDate }) => {
       open={open}
       onClose={cancel}
       title={`${currentDate} 할 일을 입력하세요.`}
-      height={600}
+      height={"auto"}
       placement={"bottom"}
       destroyOnClose //닫기시 하위요소 마운트 해제
     >
-      <Form form={form} layout="vertical" initialValues={{ color: "#1677ff" }}>
-        <Form.Item
-          name="title"
-          label="Title"
-          rules={[{ required: true, message: "제목을 입력해주세요." }]}
-        >
-          <Input type="text" placeholder="Title" />
-        </Form.Item>
-        <Form.Item
-          name="note"
-          label="Note"
-          rules={[{ required: true, message: "내용을 입력해주세요." }]}
-        >
-          <Input.TextArea rows={4} placeholder="Note" />
-        </Form.Item>
-        <Form.Item name="color" label="Color">
-          <ColorPicker
-            open={arrowOpen}
-            disabledAlpha
-            onOpenChange={setArrowOpen}
-            // value={"#1677ff"}
-            showText={() => (
-              <DownOutlined
-                rotate={arrowOpen ? 180 : 0}
-                style={{
-                  color: "rgba(0, 0, 0, 0.25)",
-                }}
-              />
-            )}
-          />
-        </Form.Item>
-        <Space>
-          <Button htmlType="submit" type="primary" onClick={submit}>
-            저장
-          </Button>
-          <Button onClick={cancel}>취소</Button>
-        </Space>
-      </Form>
+      <TodoForm
+        forms={form}
+        values={{ color: "#1677ff" }}
+        saveButton={<TodoSaveButton submit={submit} cancel={cancel} />}
+      />
     </Drawer>
   );
 };

@@ -41,13 +41,14 @@ const Home: FC<HomeProps> = ({}) => {
   const [currentWeek, setCurrentWeek] = useState<number>(getWeekOfMonth(today));
   const [currentTodo, setCurrentTodo] = useState<any>([]);
 
-  const todayFormat = format(today, "yyyy년 MM월 dd일");
+  const todayFormat = format(today, "yyyy.MM.dd");
   const dispatch = useDispatch();
   const myTodoData = useSelector((state: any) => state.todo);
   const drawerOpen = useSelector((state: any) => state.modalUi.drawerOpen);
 
+  // 날짜 생성 (todo 여부 뱃지와 함께)
   const renderDay = (day: number, date: Date) => {
-    const currentDateFormat = format(date, "yyyy년 MM월 dd일");
+    const currentDateFormat = format(date, "yyyy.MM.dd");
     const dateFilter = myTodoData.filter(
       (date: any) => date.date === currentDateFormat
     );
@@ -85,7 +86,7 @@ const Home: FC<HomeProps> = ({}) => {
   }, [currentDate, myTodoData]);
 
   useEffect(() => {
-    setCurrentDate(format(startDate, "yyyy년 MM월 dd일"));
+    setCurrentDate(format(startDate, "yyyy.MM.dd"));
     setCurrentYear(getYear(startDate));
     setCurrentMonth(getMonth(startDate) + 1);
     setCurrentDay(getDate(startDate));
@@ -103,8 +104,8 @@ const Home: FC<HomeProps> = ({}) => {
       )
     );
   });
-
-  console.log(currentDate, currentYear, currentMonth, currentWeek, currentDay);
+  console.log(myTodoData);
+  // console.log(currentDate, currentYear, currentMonth, currentWeek, currentDay);
 
   return (
     <div className={cx(styles.calendarWrap, styles.tablet)}>

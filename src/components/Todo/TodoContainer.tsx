@@ -1,5 +1,5 @@
 import React, { Children, FC, ReactNode } from "react";
-import styles from "@style/components/todo/todoContainer.module.scss";
+import styles from "@style/components/todo/TodoContainer.module.scss";
 
 interface TodoContainerProps {
   children: ReactNode;

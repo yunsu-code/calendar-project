@@ -1,5 +1,15 @@
 .listWrap {
   &.done {
+    [class^="ant-list-item-meta-content"] {
+      h4[class^="ant-list-item-meta-title"] {
+        color: $gray2;
+        text-decoration: line-through;
+      }
+      div[class^="ant-list-item-meta-description"] {
+        color: $gray2;
+        text-decoration: line-through;
+      }
+    }
   }
   &.ing {
   }

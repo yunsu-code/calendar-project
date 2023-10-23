@@ -18,14 +18,22 @@ export const selectDate = (
   },
 });
 
-export const selectTodo = (currentTodoId: number) => ({
+export const selectTodo = (currentTodoId: number, thisTodo: any) => ({
   type: SELECT_TODOID,
   payload: {
     currentTodoId: currentTodoId,
+    thisTodo: thisTodo,
   },
 });
 
-const initialState: Array<number> = [];
+const initialState = {
+  currentDate: "",
+  currentYear: 0,
+  currentMonth: 0,
+  currentWeek: 0,
+  currentDay: 0,
+  thisTodo: {},
+};
 
 export default function dateReducer(state = initialState, action: any) {
   switch (action.type) {
@@ -42,6 +50,7 @@ export default function dateReducer(state = initialState, action: any) {
       return {
         ...state,
         currentTodoId: action.payload.currentTodoId,
+        thisTodo: action.payload.thisTodo,
       };
     default:
       return state;
