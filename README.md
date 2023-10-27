@@ -6,9 +6,7 @@ typescript<br/>
 redux & redux-persist<br/>
 vite<br/>
 pnpm<br/><br/>
-
 date-fns<br/>
 react-datepicker<br/><br/>
-
 antd<br/>
 module.scss<br/>
