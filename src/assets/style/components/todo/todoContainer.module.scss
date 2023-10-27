@@ -1,10 +1,28 @@
 .todoContainer {
   width: 100%;
-  padding: 28px 16px 80px;
+  padding: 0 16px 80px;
   background-color: #fff;
+  position: relative;
+  z-index: 10;
+  transition: all 0.12s ease-in-out;
+
   > h2 {
     margin-bottom: 12px;
     font-size: 18px;
     font-weight: 700;
+  }
+  .toTopBar {
+    width: 100vw;
+    height: 27px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    text-align: center;
+    background-color: #fff;
+    transform: translateY(-25px) translateX(-16px);
+    padding-top: 9px;
+    cursor: pointer;
+    .down {
+      transform: rotate(-180deg);
+    }
   }
 }

@@ -5,6 +5,7 @@
   background-color: $skyblue;
   border: 0;
   border-radius: 0;
+  transition: all 0.15s ease-in-out;
 }
 
 // header
@@ -44,7 +45,7 @@
 
 // week
 .react-datepicker__week {
-  padding-bottom: 10px;
+  padding: 7px 0 13px;
 }
 
 // day

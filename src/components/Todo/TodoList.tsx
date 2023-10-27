@@ -7,7 +7,7 @@ import { EllipsisOutlined } from "@ant-design/icons";
 import { List } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTodo } from "@redux/todo";
-import { selectTodo } from "@redux/date";
+import { selectTodo } from "@/redux/SelectedData";
 import { stateModal } from "@redux/modalUi";
 
 interface TodoListProps {

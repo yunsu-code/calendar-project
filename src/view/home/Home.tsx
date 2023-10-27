@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useRef, ReactNode } from "react";
 // datepicker
 import DatePicker from "react-datepicker";
 import {
@@ -16,7 +16,7 @@ import TodoList from "@/components/Todo/TodoList";
 import BottomDrawer from "@/components/modalUi/BottomDrawer";
 import TodoContainer from "@/components/Todo/TodoContainer";
 // antd
-import { FloatButton, List, Input } from "antd";
+import { FloatButton, List } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import "@style/override/datepicker-custom.scss";
 import "@style/override/antd-custom.scss";
@@ -25,7 +25,7 @@ import styles from "@style/home/home.module.scss";
 import cx from "classnames";
 // redux
 import { useSelector, useDispatch } from "react-redux";
-import { selectDate } from "@redux/date";
+import { selectDate } from "@/redux/SelectedData";
 import { stateDrawer } from "@redux/modalUi";
 import UpdateModal from "@/components/modalUi/UpdateModal";
 
@@ -33,6 +33,9 @@ interface HomeProps {}
 
 const Home: FC<HomeProps> = ({}) => {
   const today = new Date();
+  const dispatch = useDispatch();
+  const calendar = useRef(null);
+  const listCont = useRef<HTMLDivElement>(null);
   const [startDate, setStartDate] = useState<Date>(today);
   const [currentDate, setCurrentDate] = useState<string>("");
   const [currentYear, setCurrentYear] = useState<number>(getYear(today));
@@ -40,9 +43,9 @@ const Home: FC<HomeProps> = ({}) => {
   const [currentDay, setCurrentDay] = useState<number>(getDate(today));
   const [currentWeek, setCurrentWeek] = useState<number>(getWeekOfMonth(today));
   const [currentTodo, setCurrentTodo] = useState<any>([]);
+  const [toTopContent, setToTopContent] = useState<Boolean>(false);
 
   const todayFormat = format(today, "yyyy.MM.dd");
-  const dispatch = useDispatch();
   const myTodoData = useSelector((state: any) => state.todo);
   const drawerOpen = useSelector((state: any) => state.modalUi.drawerOpen);
 
@@ -104,14 +107,39 @@ const Home: FC<HomeProps> = ({}) => {
       )
     );
   });
-  console.log(myTodoData);
-  // console.log(currentDate, currentYear, currentMonth, currentWeek, currentDay);
+
+  useEffect(() => {}, []);
+
+  const toTop = () => {
+    const calendarDiv = calendar.current.calendar.componentNode;
+    const weekEl = calendar.current.calendar.componentNode.querySelectorAll(
+      ".react-datepicker__week"
+    );
+    const monthEl = calendar.current.calendar.componentNode.querySelector(
+      ".react-datepicker__month"
+    );
+    const selectedWeek = weekEl[currentWeek - 1];
+    const todoListCont = listCont.current;
+    if (!toTopContent) {
+      setToTopContent(true);
+      monthEl.style.transform = `translateY(-${selectedWeek.offsetTop + 10}px)`;
+      calendarDiv.style.setProperty("position", "fixed");
+      todoListCont?.classList.add(`${styles.fixed}`);
+    } else {
+      setToTopContent(false);
+      monthEl.style.transform = `unset`;
+      calendarDiv.style.setProperty("position", "unset");
+      todoListCont?.classList.remove(`${styles.fixed}`);
+    }
+  };
 
   return (
     <div className={cx(styles.calendarWrap, styles.tablet)}>
       <div className={styles.datePicker}>
         <DatePicker
+          ref={calendar}
           className={styles.calendar}
+          disabledKeyboardNavigation
           formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 3)}
           dateFormat="yyyy.MM.dd"
           inline
@@ -119,12 +147,13 @@ const Home: FC<HomeProps> = ({}) => {
           selected={startDate}
           onChange={(dates: Date) => {
             setStartDate(dates);
+            console.log("ss");
           }}
           renderDayContents={renderDay}
         />
       </div>
       <BottomDrawer open={drawerOpen} currentDate={currentDate} />
-      <TodoContainer>
+      <TodoContainer ref={listCont} setTop={toTopContent} toTopFunc={toTop}>
         <h2>{currentDate === todayFormat ? "Today" : currentDate}</h2>
         {currentTodo.length > 0 ? (
           <List itemLayout="horizontal">

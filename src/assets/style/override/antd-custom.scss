@@ -158,6 +158,10 @@
     }
   }
   .ant-drawer-body {
-    padding-bottom: 36px;
+    padding-bottom: 77px;
+    max-height: calc(60vh - 71px);
+  }
+  .ant-drawer-content-wrapper {
+    max-height: 60vh;
   }
 }

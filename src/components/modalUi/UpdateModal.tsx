@@ -23,10 +23,12 @@ interface Values {
 
 const UpdateModal: FC<UpdateModalProps> = ({}) => {
   const [isEdit, setIsEdit] = useState(false);
-  const selectData = useSelector((state: any) => state.date);
+  const [todoTitle, setTodoTitle] = useState("");
+  const [todoNote, setTodoNote] = useState("");
+  const [todoColor, setTodoColor] = useState("");
+  const selectData = useSelector((state: any) => state.selectedData);
   const ModalOpen = useSelector((state: any) => state.modalUi.modalOpen);
   const [form] = Form.useForm();
-
   const dispatch = useDispatch();
 
   // 수정버튼 클릭시
@@ -45,7 +47,6 @@ const UpdateModal: FC<UpdateModalProps> = ({}) => {
       cancelText: "아니오",
       centered: true,
       onOk() {
-        console.log(selectData.currentTodoId);
         dispatch(deleteTodo(selectData.currentTodoId));
         dispatch(stateModal(false));
       },
@@ -72,16 +73,25 @@ const UpdateModal: FC<UpdateModalProps> = ({}) => {
     setIsEdit(false);
   };
 
-  // form에 선택한 todo 값 세팅
+  // todo 값 useState에 세팅
   useEffect(() => {
-    form.setFieldsValue({
-      title: selectData.thisTodo.title,
-      note: selectData.thisTodo.note,
-      color: Object.keys(selectData.thisTodo).includes("color")
+    setTodoTitle(selectData.thisTodo.title);
+    setTodoNote(selectData.thisTodo.note);
+    setTodoColor(
+      Object.keys(selectData.thisTodo).includes("color")
         ? Object.keys(selectData.thisTodo.color).includes("metaColor")
           ? `rgb(${selectData.thisTodo.color.metaColor.r}, ${selectData.thisTodo.color.metaColor.g}, ${selectData.thisTodo.color.metaColor.b})`
           : selectData.thisTodo.color
-        : "",
+        : ""
+    );
+  });
+
+  // 수정 팝업 form에 선택한 todo 값 세팅
+  useEffect(() => {
+    form.setFieldsValue({
+      title: todoTitle,
+      note: todoNote,
+      color: todoColor,
     });
   }, [isEdit]);
 
@@ -114,21 +124,12 @@ const UpdateModal: FC<UpdateModalProps> = ({}) => {
       {isEdit === false && (
         <>
           <Flex align="center" justify="flex-start">
-            <Badge
-              className=""
-              color={
-                Object.keys(selectData.thisTodo).includes("color")
-                  ? Object.keys(selectData.thisTodo.color).includes("metaColor")
-                    ? `rgb(${selectData.thisTodo.color.metaColor.r}, ${selectData.thisTodo.color.metaColor.g}, ${selectData.thisTodo.color.metaColor.b})`
-                    : selectData.thisTodo.color
-                  : ""
-              }
-            />
+            <Badge color={todoColor} />
             <Title level={5} style={{ margin: 0 }}>
-              {selectData.thisTodo.title}
+              {todoTitle}
             </Title>
           </Flex>
-          <p className={styles.noteText}>{selectData.thisTodo.note}</p>
+          <p className={styles.noteText}>{todoNote}</p>
         </>
       )}
       {isEdit === true && <TodoForm forms={form} />}

@@ -1,15 +1,14 @@
 .calendarWrap {
-  background-color: $skyblue;
-
+  height: 100vh;
+  overflow-y: auto;
   &.tablet {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     .datePicker {
-      // position: fixed;
-      top: 0;
-      z-index: 999;
       width: 100%;
+      > div{
+        width: 100%;
+      }
     }
   }
 
@@ -33,7 +32,6 @@
     padding: 60px 0;
     font-size: 18px;
     font-weight: 700;
-    // font-family: "score7";
     color: $gray;
     text-align: center;
   }
@@ -43,6 +41,12 @@
     justify-content: center;
     width: auto;
     height: 24px;
+    font-weight: 500 !important;
+    font-size: 12px;
+    margin-top: 1px;
+    >div {
+      flex-shrink: 0;
+    }
   }
   .colorDot {
     display: inline-block;
@@ -50,5 +54,15 @@
     height: 7px;
     margin: 0 1px;
     border-radius: 50%;
+  }
+}
+
+.fixed {
+  position: fixed;
+  top: 210px;
+  [class^="ant-list"][class~="ant-list-split"], [class^="_noData"] {
+    max-height: calc(100vh - 277px);
+    overflow-y: auto;
+    padding-bottom: 80px;
   }
 }

@@ -1,12 +1,13 @@
 import React, { FC } from "react";
 // antd=
-import { Button, Drawer, Form } from "antd";
+import { Drawer, Form } from "antd";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { addTodo } from "@redux/todo";
 import { stateDrawer } from "@redux/modalUi";
 import TodoForm from "../Todo/TodoForm";
 import TodoSaveButton from "../Todo/TodoSaveButton";
+import styles from "@style/components/modalUi/BottomDrawer.module.scss";
 interface Values {
   title: string;
   note: string;
@@ -22,7 +23,6 @@ const BottomDrawer: FC<BottomDrawerProps> = ({ open, currentDate }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const myTodoData = useSelector((state: any) => state.todo);
-  console.log(typeof form);
 
   const submit = () => {
     form
@@ -60,9 +60,14 @@ const BottomDrawer: FC<BottomDrawerProps> = ({ open, currentDate }) => {
       destroyOnClose //닫기시 하위요소 마운트 해제
     >
       <TodoForm
+        className={styles.todoForm}
         forms={form}
         values={{ color: "#1677ff" }}
-        saveButton={<TodoSaveButton submit={submit} cancel={cancel} />}
+        saveButton={
+          <div className={styles.bottomBtns}>
+            <TodoSaveButton submit={submit} cancel={cancel} />
+          </div>
+        }
       />
     </Drawer>
   );

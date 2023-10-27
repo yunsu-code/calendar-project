@@ -4,6 +4,17 @@ html,
 body {
   font-family: "score", sans-serif !important;
   color: #333;
+  // min-height: 100vh;
+  // min-height: -webkit-fill-available;
+  // height: fill-available;
+  // overflow-y: hidden;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+body {
+  height: 100vh;
+  overflow-y: hidden;
 }
 * {
   box-sizing: border-box;

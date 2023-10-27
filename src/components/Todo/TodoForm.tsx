@@ -6,12 +6,23 @@ interface TodoFormProps {
   forms: any;
   values?: object;
   saveButton?: ReactNode;
+  className?: string;
 }
 
-const TodoForm: FC<TodoFormProps> = ({ forms, values, saveButton }) => {
+const TodoForm: FC<TodoFormProps> = ({
+  forms,
+  values,
+  saveButton,
+  className,
+}) => {
   const [arrowOpen, setArrowOpen] = useState(false);
   return (
-    <Form form={forms} layout="vertical" initialValues={values}>
+    <Form
+      form={forms}
+      className={className}
+      layout="vertical"
+      initialValues={values}
+    >
       <Form.Item
         name="title"
         label="Title"
