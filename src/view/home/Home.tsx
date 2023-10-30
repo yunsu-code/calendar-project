@@ -1,15 +1,7 @@
-import React, { FC, useState, useEffect, useRef, ReactNode } from "react";
+import React, { FC, useState, useEffect, useRef } from "react";
 // datepicker
 import DatePicker from "react-datepicker";
-import {
-  getDate,
-  getMonth,
-  getYear,
-  getDay,
-  getWeek,
-  format,
-  getWeekOfMonth,
-} from "date-fns";
+import { getDate, getMonth, getYear, format, getWeekOfMonth } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 // component
 import TodoList from "@/components/Todo/TodoList";
@@ -48,6 +40,7 @@ const Home: FC<HomeProps> = ({}) => {
   const todayFormat = format(today, "yyyy.MM.dd");
   const myTodoData = useSelector((state: any) => state.todo);
   const drawerOpen = useSelector((state: any) => state.modalUi.drawerOpen);
+  const scrollTop = window.scrollY;
 
   // 날짜 생성 (todo 여부 뱃지와 함께)
   const renderDay = (day: number, date: Date) => {
@@ -108,9 +101,8 @@ const Home: FC<HomeProps> = ({}) => {
     );
   });
 
-  useEffect(() => {}, []);
-
   const toTop = () => {
+    console.log("test");
     const calendarDiv = calendar.current.calendar.componentNode;
     const weekEl = calendar.current.calendar.componentNode.querySelectorAll(
       ".react-datepicker__week"
@@ -147,7 +139,6 @@ const Home: FC<HomeProps> = ({}) => {
           selected={startDate}
           onChange={(dates: Date) => {
             setStartDate(dates);
-            console.log("ss");
           }}
           renderDayContents={renderDay}
         />

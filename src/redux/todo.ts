@@ -28,9 +28,10 @@ export const deleteTodo = (id: number) => ({
   type: DELETE_TODO,
   id,
 });
-export const editTodo = (id: number) => ({
+export const editTodo = (id: number, todo: any) => ({
   type: EDIT_TODO,
   id,
+  todo,
 });
 
 // reducer
@@ -48,8 +49,18 @@ export default function todos(state = initialState, action: any) {
     case DELETE_TODO:
       return state.slice().filter((todo) => todo.id !== action.id); // id일치하면 삭제
     case EDIT_TODO:
-      const editTodo = state.filter((todo) => todo.id == action.id);
-      return state.filter((todo) => todo.id == action.id);
+      const editTodo = state.filter((todo) => todo.id === action.id);
+      const editTodoIndex = state.indexOf(editTodo[0]);
+      return state.map((todo) =>
+        todo.id === action.id
+          ? {
+              id: state[editTodoIndex].id,
+              date: state[editTodoIndex].date,
+              done: state[editTodoIndex].done,
+              content: action.todo,
+            }
+          : todo
+      );
     default:
       return state;
   }

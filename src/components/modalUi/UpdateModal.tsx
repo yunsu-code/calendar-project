@@ -32,7 +32,7 @@ const UpdateModal: FC<UpdateModalProps> = ({}) => {
   const dispatch = useDispatch();
 
   // 수정버튼 클릭시
-  const editTodo = () => {
+  const editTodoClick = () => {
     setIsEdit(true);
     form.resetFields();
   };
@@ -59,7 +59,9 @@ const UpdateModal: FC<UpdateModalProps> = ({}) => {
       .validateFields() //필수 입력 체크
       .then((values: Values) => {
         form.resetFields();
+        dispatch(editTodo(selectData.currentTodoId, values));
         dispatch(stateModal(false));
+        setIsEdit(false);
       })
       .catch((info) => {
         console.log("Validate Failed:", info);
@@ -106,7 +108,7 @@ const UpdateModal: FC<UpdateModalProps> = ({}) => {
           <TodoSaveButton
             submitText="수정"
             cancelText="삭제"
-            submit={editTodo}
+            submit={editTodoClick}
             cancel={showDeleteConfirm}
             submitKeyText="submit"
             cancelKeyText="back"
