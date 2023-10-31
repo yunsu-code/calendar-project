@@ -40,9 +40,8 @@ const Home: FC<HomeProps> = ({}) => {
   const todayFormat = format(today, "yyyy.MM.dd");
   const myTodoData = useSelector((state: any) => state.todo);
   const drawerOpen = useSelector((state: any) => state.modalUi.drawerOpen);
-  const scrollTop = window.scrollY;
 
-  // 날짜 생성 (todo 여부 뱃지와 함께)
+  // 날짜 생성 (todo 유무 뱃지와 함께)
   const renderDay = (day: number, date: Date) => {
     const currentDateFormat = format(date, "yyyy.MM.dd");
     const dateFilter = myTodoData.filter(
@@ -77,10 +76,12 @@ const Home: FC<HomeProps> = ({}) => {
     );
   };
 
+  // 선택한 투두리스트 state에 저장
   useEffect(() => {
     setCurrentTodo(myTodoData.filter((date: any) => date.date === currentDate));
   }, [currentDate, myTodoData]);
 
+  // 선택한 날짜 정보 state에 저장
   useEffect(() => {
     setCurrentDate(format(startDate, "yyyy.MM.dd"));
     setCurrentYear(getYear(startDate));
@@ -89,6 +90,7 @@ const Home: FC<HomeProps> = ({}) => {
     setCurrentWeek(getWeekOfMonth(startDate));
   }, [startDate]);
 
+  // 선택한 날짜 정보 dispatch
   useEffect(() => {
     dispatch(
       selectDate(
@@ -101,6 +103,7 @@ const Home: FC<HomeProps> = ({}) => {
     );
   });
 
+  // 주간보기 버튼 클릭 이벤트
   const toTop = () => {
     console.log("test");
     const calendarDiv = calendar.current.calendar.componentNode;

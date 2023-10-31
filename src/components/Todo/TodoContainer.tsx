@@ -5,8 +5,8 @@ import cx from "classnames";
 
 interface TodoContainerProps {
   children: ReactNode;
-  toTopFunc: () => void;
-  setTop: Boolean;
+  toTopFunc: () => void; //주간 보기 버튼 클릭시
+  setTop: Boolean; //주간보기 클릭여부(화살표 방향)
 }
 
 const TodoContainer = forwardRef<HTMLDivElement, TodoContainerProps>(

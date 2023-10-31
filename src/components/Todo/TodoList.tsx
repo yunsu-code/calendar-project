@@ -52,10 +52,7 @@ const TodoList: FC<TodoListProps> = ({
 
   return (
     <List.Item
-      className={cx(
-        styles.listWrap,
-        checked || check ? styles.done : styles.ing
-      )}
+      className={cx(styles.listWrap, checked || check ? styles.done : "")}
       actions={[
         <>
           <Button onClick={clickUpdate} icon={<EllipsisOutlined />}></Button>

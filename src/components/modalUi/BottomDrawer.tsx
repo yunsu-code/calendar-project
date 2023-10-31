@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-// antd=
+// antd
 import { Drawer, Form } from "antd";
 // redux
 import { useSelector, useDispatch } from "react-redux";
@@ -24,6 +24,7 @@ const BottomDrawer: FC<BottomDrawerProps> = ({ open, currentDate }) => {
   const dispatch = useDispatch();
   const myTodoData = useSelector((state: any) => state.todo);
 
+  // 저장 클릭시
   const submit = () => {
     form
       .validateFields() //필수 입력 체크
@@ -45,6 +46,7 @@ const BottomDrawer: FC<BottomDrawerProps> = ({ open, currentDate }) => {
       });
   };
 
+  // 취소 클릭시
   const cancel = () => {
     form.resetFields();
     dispatch(stateDrawer(false));
